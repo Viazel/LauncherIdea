@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/splash.css">
+</head>
+<body>
+<div id="splash">
+    <img src="./asset/icons/bigHyranio.png" alt="">
+    <h1 id="update">Recherche de mise à jour..</h1>
+</div>
+<script>
+    const ipc = require("electron").ipcRenderer
+    const update = document.getElementById("update");
+
+    ipc.send("splash")
+
+    ipc.on('autoUpdateNotification', (evt, data) => {
+        update.innerHTML = data;
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<div id="frame">
+    <div id="bar">
+        <div id="options">
+            <img id="minus" src="./asset/icons/minus.svg" alt="">
+            <img id="cross" src="./asset/icons/cross.svg" alt="">
+        </div>
+    </div>
+    <div id="logo">
+        <img src="./asset/icons/logo.png" alt="">
+        <nav>
+            <ul>
+                <li>JOUER</li>
+                <li>LAUNCHER</li>
+                <li>À PROPOS</li>
+            </ul>
+        </nav>
+    </div>
+    <div id="social">
+        <div class="box-social" id="discord-social">
+            <div class="svg-social" style="background: rgba(99, 102, 241, 0.3);">
+                <img src="./asset/icons/discord.svg" alt="">
+            </div>
+            <div class="text-social">
+                <h1>Discord</h1>
+                <p>discord.gg/Hyranio</p>
+            </div>
+        </div>
+        <div class="box-social" id="youtube-social">
+            <div class="svg-social" style="background: rgba(220, 38, 38, 0.3);">
+                <img src="./asset/icons/youtube.svg" alt="">
+            </div>
+            <div class="text-social">
+                <h1>Youtube</h1>
+                <p>@hyranio</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const minus = document.getElementById("minus");
+    const cross = document.getElementById("cross");
+
+    minus.onclick = () => {
+        ipc.send("minus")
+    }
+
+    cross.onclick = () => {
+        ipc.send("quit")
+    }
+
+
+</script>

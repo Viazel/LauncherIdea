@@ -1,0 +1,323 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    -webkit-user-select: none;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    position: absolute;
+    z-index: 0.5;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(18, 18, 18, 0.7) 70%, rgba(18, 18, 18, 1) 100%), url('../asset/images/background-connection.png');
+    background-size: contain;
+    transition: all ease-in-out 1.5s;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+body.activatedLauncher {
+    background-position: 0 -470px;
+}
+
+#connection-part {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transition: all ease-in-out 1.5s;
+}
+
+#connection-part.activatedLauncher {
+    transform: translateY(-100%);
+}
+
+#bar {
+    position: absolute;
+    height: 30px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+}
+
+#options {
+    -webkit-app-region: no-drag;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    right: 0;
+    height: 30px;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+#minus, #cross {
+    cursor: pointer;
+    height: 30px;
+    stroke: white;
+    z-index: 1;
+}
+
+#cross {
+    transform: scale(80%);
+}
+
+#connection {
+    padding: 20px 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-direction: column;
+    width: 350px;
+    height: 235px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 19px;
+    transform: translate(-50%, -50%);
+    background: rgba(38, 38, 38, 0.7);
+    backdrop-filter: blur(3px);
+}
+
+#connection div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    height: 90px;
+}
+
+#connection div button {
+    cursor: pointer;
+    margin: 15px auto;
+    width: 275px;
+    height: 55px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #78350F;
+    background: linear-gradient(90deg, rgba(255, 212, 101, 1) 0%, rgba(248, 165, 40, 1) 100%);
+    border-radius: 6px;
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.05);
+    transition: all ease-in-out 150ms;
+}
+
+#connection div button:hover {
+    transform: translate(2px, -3px);
+}
+
+#connection div h1 {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+#connection h1 {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 20px;
+    color: #fff;
+}
+
+#connection h1:nth-child(3) {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+#social {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px;
+    height: 72px;
+    z-index: 1;
+}
+
+.box-social {
+    margin: auto;
+    cursor: pointer;
+    width: 200px;
+    height: 60px;
+    background: rgba(71, 71, 71, 0.3);
+    border-radius: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+}
+
+.box-social img {
+    margin: auto;
+    height: 10px;
+}
+
+.svg-social {
+    margin: auto 13px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.text-social {
+    margin: auto 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+.text-social h1 {
+    text-align: left;
+    margin-bottom: 4px;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 12px;
+    color: #fafafa;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.text-social p {
+    text-align: left;
+    margin-bottom: 2px;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    color: #737373;
+    font-weight: bold;
+}
+
+#logo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 125px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-direction: column;
+    z-index: 1;
+}
+
+#logo img {
+    margin: 0 auto;
+    width: 80%;
+}
+
+#logo ul {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#logo nav ul li {
+    cursor: pointer;
+    font-family: Inter, Arial, sans-serif;
+    list-style-type: none;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 12px;
+    padding: 10px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #ab7373;
+    transition: all ease-in-out 150ms;
+}
+
+#logo nav ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#launcher {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    bottom: -100%;
+    transition: all ease-in-out 1.5s;
+}
+
+#launcher.activatedLauncher {
+    transform: translateY(-100%);
+}
+
+#launcher-option {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    height: 340px;
+    width: 250px;
+}
+
+#launcher-option .box-social {
+    width: 100%;
+}
+
+#launcher-option .box-social img {
+    height: 30px;
+}
+
+#launcher-option > h1 {
+    margin: auto auto 30px auto;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 25px;
+    color: #fafafa;
+}
+
+#player {
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translateY(-50%);
+    background: rgba(38, 38, 38, 0.8);
+    border-radius: 6px;
+    width: 270px;
+    height: 420px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    border: solid rgba(122, 122, 122, 0.5) 1px;
+}
+
+#player h1 {
+    margin: 0 auto;
+    color: #fff;
+    font-family: Inter, Arial, sans-serif;
+}
+
+#player img {
+    margin: 0 auto;
+    width: 230px;
+}
+
+#settings {
+    position: absolute;
+    bottom: 35px;
+    left: 50px;
+    width: 160px;
+}
+
+#settings .svg-social, #settings img {
+    width: 40px;
+    height: 40px;
+}

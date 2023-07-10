@@ -1,0 +1,26 @@
+<div id="connection-part">
+    <div id="connection">
+        <h1>CONNEXION</h1>
+        <div>
+            <button>Se connecter</button>
+            <h1 id="">Connecte-toi a ton compte Microsoft pour lier ton compte Minecraft</h1>
+        </div>
+        <h1>Comment me connecter ?</h1>
+    </div>
+</div>
+
+<script>
+    const discord = document.getElementById("discord-social")
+    const youtube = document.getElementById("youtube-social")
+
+    discord.addEventListener('click', () => {
+        document.getElementById("connection-part").classList.toggle("activatedLauncher")
+        document.body.classList.toggle("activatedLauncher")
+        document.getElementById("launcher").classList.toggle("activatedLauncher")
+    })
+
+    youtube.onclick = () => {
+        ipc.send("social", "youtube")
+    }
+
+</script>

@@ -2,47 +2,40 @@ const remoteMain = require('@electron/remote/main')
 remoteMain.initialize()
 
 // Requirements
-const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, shell} = require('electron')
 const autoUpdater                       = require('electron-updater').autoUpdater
-const ejse                              = require('ejs-electron')
-const fs                                = require('fs')
-const isDev                             = require('./app/assets/js/isdev')
 const path                              = require('path')
+const ejse = require('ejs-electron')
 const semver                            = require('semver')
-const { pathToFileURL }                 = require('url')
 const { AZURE_CLIENT_ID, MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR, SHELL_OPCODE } = require('./app/assets/js/ipcconstants')
 
 // Setup auto updater.
-function initAutoUpdater(event, data) {
+function initAutoUpdater(win, splash) {
 
-    if(data){
-        autoUpdater.allowPrerelease = true
-    } else {
-        // Defaults to true if application version contains prerelease components (e.g. 0.12.1-alpha.1)
-        // autoUpdater.allowPrerelease = true
-    }
-    
-    if(isDev){
-        autoUpdater.autoInstallOnAppQuit = false
-        autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml')
-    }
+    autoUpdater.autoInstallOnAppQuit = true
+
     if(process.platform === 'darwin'){
         autoUpdater.autoDownload = false
     }
+
     autoUpdater.on('update-available', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-available', info)
+        splash.sender.send('autoUpdateNotification', 'update-available', info)
     })
     autoUpdater.on('update-downloaded', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-downloaded', info)
+        splash.sender.send('autoUpdateNotification', 'update-downloaded', info)
+        autoUpdater.quitAndInstall()
     })
     autoUpdater.on('update-not-available', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-not-available', info)
+        splash.sender.send('autoUpdateNotification', 'update-not-available', info)
+        splash.destroy()
+        win.show()
     })
     autoUpdater.on('checking-for-update', () => {
-        event.sender.send('autoUpdateNotification', 'checking-for-update')
+        splash.sender.send('autoUpdateNotification', 'checking-for-update')
     })
     autoUpdater.on('error', (err) => {
-        event.sender.send('autoUpdateNotification', 'realerror', err)
+        splash.sender.send('autoUpdateNotification', 'realerror', err)
+        app.quit()
     }) 
 }
 
@@ -223,34 +216,72 @@ let win
 function createWindow() {
 
     win = new BrowserWindow({
-        width: 980,
-        height: 552,
+        width: 1280,
+        height: 720,
         icon: getPlatformIcon('SealCircle'),
         frame: false,
+        show: false,
+        backgroundColor: '#121212',
+        resizable: false,
         webPreferences: {
-            preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
             nodeIntegration: true,
             contextIsolation: false
-        },
-        backgroundColor: '#171614'
+        }
     })
-    remoteMain.enable(win.webContents)
 
-    ejse.data('bkid', Math.floor((Math.random() * fs.readdirSync(path.join(__dirname, 'app', 'assets', 'images', 'backgrounds')).length)))
+    const splash = new BrowserWindow({
+        width: 550,
+        height: 700,
+        frame: false,
+        resizable: false,
+        movable: false,
+        center: true,
+        show: true,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    })
 
-    win.loadURL(pathToFileURL(path.join(__dirname, 'app', 'app.ejs')).toString())
+    splash.loadFile(path.join(__dirname, 'app', 'hyranio', 'splash.ejs'))
 
-    /*win.once('ready-to-show', () => {
-        win.show()
-    })*/
+    win.loadFile(path.join(__dirname, 'app', 'hyranio', 'app.ejs'))
 
-    win.removeMenu()
+    win.webContents.send('test')
 
-    win.resizable = true
+    splash.webContents.send('test', 'sidfhosduihfsdu')
+
+    ipcMain.on('splash', (splashevt, datasplash) => {
+        initAutoUpdater(win, splashevt)
+    })
+
+    autoUpdater.checkForUpdates()
+
+    // win.removeMenu()
 
     win.on('closed', () => {
         win = null
     })
+
+    ipcMain.on('quit', () => {
+        app.quit()
+    })
+
+    ipcMain.on('minus', () => {
+        win.minimize()
+    })
+
+    ipcMain.on('social', (evt, data) => {
+        switch (data) {
+            case 'discord':
+                shell.openExternal('https://discord.com')
+                break
+            case 'youtube':
+                shell.openExternal('https://youtube.com/@hyranio')
+                break
+        }
+    })
+
 }
 
 function createMenu() {
