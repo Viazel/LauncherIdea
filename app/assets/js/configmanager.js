@@ -578,7 +578,9 @@ exports.getMinRAM = function(serverid){
  * @param {string} minRAM The new minimum amount of memory for JVM initialization.
  */
 exports.setMinRAM = function(serverid, minRAM){
-    config.javaConfig[serverid].minRAM = minRAM
+    config.javaConfig[serverid] = {
+        ['minRAM']: minRAM
+    }
 }
 
 /**

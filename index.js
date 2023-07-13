@@ -29,6 +29,10 @@ function initAutoUpdater(win, splash, splashwindow) {
         splashwindow.destroy()
         win.show()
     })
+    autoUpdater.on('download-progress', (info) => {
+        console.log(info)
+        splash.sender.send('autoUpdateNotification', 'Mise à jour en cours de téléchargement')
+    })
     autoUpdater.on('checking-for-update', () => {
         splash.sender.send('autoUpdateNotification', 'Recherche de mise à jour')
     })
@@ -267,10 +271,21 @@ function createWindow() {
         win.minimize()
     })
 
+    ipcMain.on('winOpacity', (evt, data) => {
+        switch (data) {
+            case 'hide':
+                win.hide()
+                break
+            case 'show':
+                win.show()
+                break
+        }
+    })
+
     ipcMain.on('social', (evt, data) => {
         switch (data) {
             case 'discord':
-                shell.openExternal('https://discord.com')
+                shell.openExternal('https://discord.com/invite/FGfJBepbPg')
                 break
             case 'youtube':
                 shell.openExternal('https://youtube.com/@hyranio')

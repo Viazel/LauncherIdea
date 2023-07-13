@@ -258,28 +258,28 @@ class ProcessBuilder {
         return modList
     }
 
-    // /**
-    //  * Construct the mod argument list for forge 1.13
-    //  * 
-    //  * @param {Array.<Object>} mods An array of mods to add to the mod list.
-    //  */
-    // constructModArguments(mods){
-    //     const argStr = mods.map(mod => {
-    //         return mod.getExtensionlessMavenIdentifier()
-    //     }).join(',')
+    /**
+     * Construct the mod argument list for forge 1.13
+     *
+     * @param {Array.<Object>} mods An array of mods to add to the mod list.
+     */
+    constructModArguments(mods){
+        const argStr = mods.map(mod => {
+            return mod.getExtensionlessMavenIdentifier()
+        }).join(',')
 
-    //     if(argStr){
-    //         return [
-    //             '--fml.mavenRoots',
-    //             path.join('..', '..', 'common', 'modstore'),
-    //             '--fml.mods',
-    //             argStr
-    //         ]
-    //     } else {
-    //         return []
-    //     }
+        if(argStr){
+            return [
+                '--fml.mavenRoots',
+                path.join('..', '..', 'common', 'modstore'),
+                '--fml.mods',
+                argStr
+            ]
+        } else {
+            return []
+        }
         
-    // }
+    }
 
     /**
      * Construct the mod argument list for forge 1.13
@@ -383,6 +383,8 @@ class ProcessBuilder {
 
         // Debug securejarhandler
         // args.push('-Dbsl.debug=true')
+
+        console.log(this.forgeData)
 
         if(this.forgeData.arguments.jvm != null) {
             for(const argStr of this.forgeData.arguments.jvm) {

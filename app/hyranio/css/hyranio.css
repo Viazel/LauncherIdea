@@ -5,6 +5,7 @@
     padding: 0;
     margin: 0;
     -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 
 html, body {
@@ -297,12 +298,15 @@ body.activatedLauncher {
     align-content: center;
     flex-direction: column;
     border: solid rgba(122, 122, 122, 0.5) 1px;
+    overflow: hidden;
 }
 
 #player h1 {
+    text-align: center;
     margin: 0 auto;
     color: #fff;
     font-family: Inter, Arial, sans-serif;
+    font-size: 1.5rem;
 }
 
 #player img {
