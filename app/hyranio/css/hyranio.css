@@ -15,7 +15,7 @@ html, body {
 body {
     position: absolute;
     z-index: 0.5;
-    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(18, 18, 18, 0.7) 70%, rgba(18, 18, 18, 1) 100%), url('../asset/images/background-connection.png');
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(18, 18, 18, 0.7) 70%, rgba(18, 18, 18, 1) 100%), url('../../assets/images/background-connection.png');
     background-size: contain;
     transition: all ease-in-out 1.5s;
     background-repeat: no-repeat;
@@ -306,8 +306,8 @@ body.activatedLauncher {
 }
 
 #player img {
-    margin: 0 auto;
-    width: 230px;
+    margin: 15px auto 0 auto;
+    width: 140px;
 }
 
 #settings {
@@ -320,4 +320,10 @@ body.activatedLauncher {
 #settings .svg-social, #settings img {
     width: 40px;
     height: 40px;
+}
+
+.box-social.activatedPlay {
+    position: relative;
+    left: 0;
+    top: 0;
 }

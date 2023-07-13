@@ -1,6 +1,5 @@
 const remoteMain = require('@electron/remote/main')
 remoteMain.initialize()
-
 // Requirements
 const { app, BrowserWindow, ipcMain, Menu, shell} = require('electron')
 const autoUpdater                       = require('electron-updater').autoUpdater
@@ -10,7 +9,7 @@ const semver                            = require('semver')
 const { AZURE_CLIENT_ID, MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR, SHELL_OPCODE } = require('./app/assets/js/ipcconstants')
 
 // Setup auto updater.
-function initAutoUpdater(win, splash) {
+function initAutoUpdater(win, splash, splashwindow) {
 
     autoUpdater.autoInstallOnAppQuit = true
 
@@ -19,19 +18,19 @@ function initAutoUpdater(win, splash) {
     }
 
     autoUpdater.on('update-available', (info) => {
-        splash.sender.send('autoUpdateNotification', 'update-available', info)
+        splash.sender.send('autoUpdateNotification', 'Mise à jour disponible !', info)
     })
     autoUpdater.on('update-downloaded', (info) => {
-        splash.sender.send('autoUpdateNotification', 'update-downloaded', info)
+        splash.sender.send('autoUpdateNotification', 'Mise à jour téléchargée !', info)
         autoUpdater.quitAndInstall()
     })
     autoUpdater.on('update-not-available', (info) => {
-        splash.sender.send('autoUpdateNotification', 'update-not-available', info)
-        splash.destroy()
+        splash.sender.send('autoUpdateNotification', 'Mise à jour non disponible !', info)
+        splashwindow.destroy()
         win.show()
     })
     autoUpdater.on('checking-for-update', () => {
-        splash.sender.send('autoUpdateNotification', 'checking-for-update')
+        splash.sender.send('autoUpdateNotification', 'Recherche de mise à jour')
     })
     autoUpdater.on('error', (err) => {
         splash.sender.send('autoUpdateNotification', 'realerror', err)
@@ -119,7 +118,7 @@ ipcMain.on(MSFT_OPCODE.OPEN_LOGIN, (ipcEvent, ...arguments_) => {
         width: 520,
         height: 600,
         frame: true,
-        icon: getPlatformIcon('SealCircle')
+        icon: getPlatformIcon('hyranio')
     })
 
     msftAuthWindow.on('closed', () => {
@@ -218,7 +217,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 1280,
         height: 720,
-        icon: getPlatformIcon('SealCircle'),
+        icon: getPlatformIcon('hyranio'),
         frame: false,
         show: false,
         backgroundColor: '#121212',
@@ -232,6 +231,7 @@ function createWindow() {
     const splash = new BrowserWindow({
         width: 550,
         height: 700,
+        icon: getPlatformIcon('hyranio'),
         frame: false,
         resizable: false,
         movable: false,
@@ -247,12 +247,8 @@ function createWindow() {
 
     win.loadFile(path.join(__dirname, 'app', 'hyranio', 'app.ejs'))
 
-    win.webContents.send('test')
-
-    splash.webContents.send('test', 'sidfhosduihfsdu')
-
     ipcMain.on('splash', (splashevt, datasplash) => {
-        initAutoUpdater(win, splashevt)
+        initAutoUpdater(win, splashevt, splash)
     })
 
     autoUpdater.checkForUpdates()
@@ -283,6 +279,10 @@ function createWindow() {
     })
 
 }
+
+app.on('browser-window-created', (_, window) => {
+    remoteMain.enable(window.webContents)
+})
 
 function createMenu() {
     
@@ -361,7 +361,7 @@ function getPlatformIcon(filename){
             break
     }
 
-    return path.join(__dirname, 'app', 'assets', 'images', `${filename}.${ext}`)
+    return `./app/assets/icons/${filename}.${ext}`
 }
 
 app.on('ready', createWindow)

@@ -2,7 +2,7 @@
     <div id="connection">
         <h1>CONNEXION</h1>
         <div>
-            <button>Se connecter</button>
+            <button id="connection-button">Se connecter !</button>
             <h1 id="">Connecte-toi a ton compte Microsoft pour lier ton compte Minecraft</h1>
         </div>
         <h1>Comment me connecter ?</h1>
@@ -10,13 +10,29 @@
 </div>
 
 <script>
-    const discord = document.getElementById("discord-social")
-    const youtube = document.getElementById("youtube-social")
 
+    const button = document.getElementById("connection-button")
+
+    const { MSFT_OPCODE, MSFT_REPLY_TYPE } = require("../assets/js/ipcconstants")
     discord.addEventListener('click', () => {
-        document.getElementById("connection-part").classList.toggle("activatedLauncher")
-        document.body.classList.toggle("activatedLauncher")
-        document.getElementById("launcher").classList.toggle("activatedLauncher")
+        ipc.send("social", "discord")
+    })
+
+    button.addEventListener("click", () => {
+        ipc.send(MSFT_OPCODE.OPEN_LOGIN);
+    })
+
+    ipc.on(MSFT_OPCODE.REPLY_LOGIN, (evt, ...data) => {
+        if(data[0] !== MSFT_REPLY_TYPE.SUCCESS) return;
+        button.innerHTML = "Connexion en cours..."
+        AuthManager.addMicrosoftAccount(data[1].code).then(value => {
+            button.innerHTML = "Connecté !!"
+            document.getElementById("player-name").innerHTML = value.displayName
+            document.getElementById("player-skin").src = 'https://mc-heads.net/body/' + value.uuid + '/240'
+            switchLauncherView()
+        }).catch(result => {
+            console.log(result);
+        })
     })
 
     youtube.onclick = () => {

@@ -3,7 +3,7 @@
         <h1>LES LAUNCHERS</h1>
         <div class="box-social" id="hyranio-option">
             <div class="svg-social">
-                <img src="./asset/icons/hyranio.png" alt="">
+                <img src="../assets/icons/hyranio.png" alt="">
             </div>
             <div class="text-social">
                 <h1>Hyranio</h1>
@@ -12,7 +12,7 @@
         </div>
         <div class="box-social" id="youtube-social">
             <div class="svg-social">
-                <img src="./asset/icons/minecraft.png" alt="">
+                <img src="../assets/icons/minecraft.png" alt="">
             </div>
             <div class="text-social">
                 <h1>Minecraft</h1>
@@ -21,7 +21,7 @@
         </div>
         <div class="box-social" id="youtube-social">
             <div class="svg-social">
-                <img src="./asset/icons/minigames.png" alt="">
+                <img src="../assets/icons/minigames.png" alt="">
             </div>
             <div class="text-social">
                 <h1>Mini-Games</h1>
@@ -30,12 +30,12 @@
         </div>
     </div>
     <div id="player">
-        <h1>YelloX605</h1>
-        <img src="./asset/icons/testplayer.png" alt="">
+        <h1 id="player-name">YelloX605</h1>
+        <img id="player-skin" alt="">
     </div>
     <div id="settings" class="box-social">
         <div class="svg-social">
-            <img src="./asset/icons/settings.png" alt="">
+            <img src="../assets/icons/settings.png" alt="">
         </div>
         <div class="text-social">
             <h1>Réglages</h1>
@@ -43,3 +43,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll("#launcher-option > .box-social").forEach(element => {
+        element.onclick = () => {
+            switchPlayView(element)
+        }
+    })
+</script>

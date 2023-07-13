@@ -15,7 +15,21 @@
     <%- include('launcher') %>
 </div>
 <script>
-    const ipc = require("electron").ipcRenderer;
+
+    ConfigManager.load()
+
+    if(ConfigManager.isLoaded()) {
+        if(ConfigManager.getSelectedAccount() !== undefined) {
+            button.disabled = true
+            button.innerHTML = "Connexion en cours..."
+            setTimeout(() => {
+                const value = ConfigManager.getSelectedAccount()
+                document.getElementById("player-name").innerHTML = value.displayName
+                document.getElementById("player-skin").src = 'https://mc-heads.net/body/' + value.uuid + '/240'
+                switchLauncherView()
+            }, 1500)
+        }
+    }
 
     ipc.send("app")
 

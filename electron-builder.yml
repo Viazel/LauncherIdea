@@ -14,13 +14,15 @@ extraResources:
   - 'libraries'
 
 # Windows Configuration
-win: 
+win:
+  icon: './build/icon.ico'
   target: 
     - target: 'nsis'
       arch: 'x64'
 
 # Windows Installer Configuration
 nsis:
+  installerIcon: './build/icon.ico'
   oneClick: false
   perMachine: false
   allowElevation: true
