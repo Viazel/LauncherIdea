@@ -13,7 +13,6 @@
 
     const button = document.getElementById("connection-button")
 
-    const { MSFT_OPCODE, MSFT_REPLY_TYPE } = require("../assets/js/ipcconstants")
     discord.addEventListener('click', () => {
         ipc.send("social", "discord")
     })
@@ -25,6 +24,7 @@
     ipc.on(MSFT_OPCODE.REPLY_LOGIN, (evt, ...data) => {
         if(data[0] !== MSFT_REPLY_TYPE.SUCCESS) return;
         button.innerHTML = "Connexion en cours..."
+        button.disabled = true
         AuthManager.addMicrosoftAccount(data[1].code).then(value => {
             button.innerHTML = "Connecté !!"
             document.getElementById("player-name").innerHTML = value.displayName

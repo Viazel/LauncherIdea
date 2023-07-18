@@ -223,7 +223,7 @@ function createWindow() {
         height: 720,
         icon: getPlatformIcon('hyranio'),
         frame: false,
-        show: false,
+        show: true,
         backgroundColor: '#121212',
         resizable: false,
         webPreferences: {
@@ -240,7 +240,7 @@ function createWindow() {
         resizable: false,
         movable: false,
         center: true,
-        show: true,
+        show: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false

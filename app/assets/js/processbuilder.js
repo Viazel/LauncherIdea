@@ -20,6 +20,7 @@ class ProcessBuilder {
         this.server = distroServer
         this.versionData = versionData
         this.forgeData = forgeData
+        this.forgeData.mainClass = 'net.minecraft.client.main.Main'
         this.authUser = authUser
         this.launcherVersion = launcherVersion
         this.forgeModListFile = path.join(this.gameDir, 'forgeMods.list') // 1.13+
@@ -44,7 +45,7 @@ class ProcessBuilder {
         
         // Mod list below 1.13
         if(!mcVersionAtLeast('1.13', this.server.rawServer.minecraftVersion)){
-            this.constructJSONModList('forge', modObj.fMods, true)
+            // this.constructJSONModList('forge', modObj.fMods, true)
             if(this.usingLiteLoader){
                 this.constructJSONModList('liteloader', modObj.lMods, true)
             }
@@ -54,7 +55,7 @@ class ProcessBuilder {
         let args = this.constructJVMArguments(uberModArr, tempNativePath)
 
         if(mcVersionAtLeast('1.13', this.server.rawServer.minecraftVersion)){
-            //args = args.concat(this.constructModArguments(modObj.fMods))
+            args = args.concat(this.constructModArguments(modObj.fMods))
             args = args.concat(this.constructModList(modObj.fMods))
         }
 
@@ -384,8 +385,6 @@ class ProcessBuilder {
         // Debug securejarhandler
         // args.push('-Dbsl.debug=true')
 
-        console.log(this.forgeData)
-
         if(this.forgeData.arguments.jvm != null) {
             for(const argStr of this.forgeData.arguments.jvm) {
                 args.push(argStr
@@ -502,7 +501,7 @@ class ProcessBuilder {
                             val = args[i].replace(argDiscovery, tempNativePath)
                             break
                         case 'launcher_name':
-                            val = args[i].replace(argDiscovery, 'Helios-Launcher')
+                            val = args[i].replace(argDiscovery, 'Hyranio-Launcher')
                             break
                         case 'launcher_version':
                             val = args[i].replace(argDiscovery, this.launcherVersion)
@@ -666,12 +665,12 @@ class ProcessBuilder {
     classpathArg(mods, tempNativePath){
         let cpArgs = []
 
-        if(!mcVersionAtLeast('1.17', this.server.rawServer.minecraftVersion)) {
-            // Add the version.jar to the classpath.
-            // Must not be added to the classpath for Forge 1.17+.
-            const version = this.versionData.id
-            cpArgs.push(path.join(this.commonDir, 'versions', version, version + '.jar'))
-        }
+        // if(!mcVersionAtLeast('1.17', this.server.rawServer.minecraftVersion)) {
+        //     // Add the version.jar to the classpath.
+        //     // Must not be added to the classpath for Forge 1.17+.
+        //     const version = this.versionData.id
+        //     cpArgs.push(path.join(this.commonDir, 'versions', version, version + '.jar'))
+        // }
         
 
         if(this.usingLiteLoader){
@@ -688,7 +687,23 @@ class ProcessBuilder {
         // maven identifier will override the mojang ones.
         // Ex. 1.7.10 forge overrides mojang's guava with newer version.
         const finalLibs = {...mojangLibs, ...servLibs}
-        cpArgs = cpArgs.concat(Object.values(finalLibs))
+
+        let templibs = 'C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\mojang\\authlib\\1.5.21\\authlib-1.5.21.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\paulscode\\codecjorbis\\20101023\\codecjorbis-20101023.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\paulscode\\codecwav\\20101023\\codecwav-20101023.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\commons-codec\\commons-codec\\1.9\\commons-codec-1.9.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\commons\\commons-compress\\1.8.1\\commons-compress-1.8.1.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\commons-io\\commons-io\\2.4\\commons-io-2.4.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\commons\\commons-lang3\\3.3.2\\commons-lang3-3.3.2.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\commons-logging\\commons-logging\\1.1.3\\commons-logging-1.1.3.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\google\\code\\gson\\gson\\2.2.4\\gson-2.2.4.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\google\\guava\\guava\\17.0\\guava-17.0.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\httpcomponents\\httpclient\\4.3.3\\httpclient-4.3.3.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\httpcomponents\\httpcore\\4.3.2\\httpcore-4.3.2.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\ibm\\icu\\icu4j-core-mojang\\51.2\\icu4j-core-mojang-51.2.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\net\\java\\jinput\\jinput\\2.0.5\\jinput-2.0.5.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\net\\java\\dev\\jna\\jna\\3.4.0\\jna-3.4.0.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\4.6\\jopt-simple-4.6.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\net\\java\\jutils\\jutils\\1.0.0\\jutils-1.0.0.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\paulscode\\libraryjavasound\\20101123\\libraryjavasound-20101123.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\paulscode\\librarylwjglopenal\\20100824\\librarylwjglopenal-20100824.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.0-beta9\\log4j-api-2.0-beta9.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.0-beta9\\log4j-core-2.0-beta9.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\lwjgl\\lwjgl\\lwjgl_util\\2.9.4-nightly-20150209\\lwjgl_util-2.9.4-nightly-20150209.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\org\\lwjgl\\lwjgl\\lwjgl\\2.9.4-nightly-20150209\\lwjgl-2.9.4-nightly-20150209.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\io\\netty\\netty-all\\4.0.23.Final\\netty-all-4.0.23.Final.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\oshi-project\\oshi-core\\1.1\\oshi-core-1.1.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\net\\java\\dev\\jna\\platform\\3.4.0\\platform-3.4.0.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\mojang\\realms\\1.7.39\\realms-1.7.39.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\com\\paulscode\\soundsystem\\20120107\\soundsystem-20120107.jar;C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft\\libraries\\tv\\twitch\\twitch\\6.5\\twitch-6.5.jar'
+
+        templibs = templibs.split(';')
+
+        let libs = []
+
+        templibs.forEach(value => {
+            libs.push(value.replaceAll('C:\\Users\\Timeo\\AppData\\Roaming\\.minecraft', ConfigManager.getCommonDirectory))
+        })
+
+        libs.push(ConfigManager.getInstanceDirectory() + '\\' + ConfigManager.getSelectedServer() + '\\version\\Hyranio.jar')
+
+        console.log(libs)
+        console.log(this.forgeData)
+
+        cpArgs = cpArgs.concat(Object.values(libs))
 
         this._processClassPathList(cpArgs)
 

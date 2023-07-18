@@ -53,16 +53,16 @@
 
     async function launchGame() {
 
+        const { DistroAPI } = require("../assets/js/distromanager")
+
+        const distro = await DistroAPI.refreshDistributionOrFallback()
+
         const { FullRepair, MojangIndexProcessor, DistributionIndexProcessor } = require('helios-core/dl')
         const ProcessBuilder = require("../assets/js/processbuilder")
 
         const remote = require("@electron/remote")
 
-        const { DistroAPI } = require("../assets/js/distromanager")
-
-        const distro = await DistroAPI.refreshDistributionOrFallback()
-
-        const serverName = "Niderio-1.12.2"
+        const serverName = "Niderio-1.8.8"
 
         ConfigManager.setSelectedServer(serverName)
         ConfigManager.setModConfiguration(serverName, {
@@ -71,7 +71,7 @@
         })
         ConfigManager.setMinRAM(serverName, "4G")
         ConfigManager.setMaxRAM(serverName, "10G")
-        ConfigManager.setJavaExecutable(serverName, path.join("C:", "Program Files", "Java", fs.readdirSync("C:\\Program Files\\Java").filter(value => value.includes("1.8.0")).pop(), "bin", "java.exe"))
+        ConfigManager.setJavaExecutable(serverName, path.join("C:", "Program Files", "Java", fs.readdirSync("C:\\Program Files\\Java").filter(value => value.includes("1.8")).pop(), "bin", "javaw.exe"))
         ConfigManager.setJVMOptions(serverName, ["-Xmn128M"])
         ConfigManager.save()
 
@@ -123,17 +123,13 @@
         const versionData = await mojang.getVersionJson()
         const versionForge = await distributionIndexProcessor.loadForgeVersionJson()
 
-        ProcessBuilder.isModEnabled(false)
-
         let pb = new ProcessBuilder(serv, versionData, versionForge, ConfigManager.getSelectedAccount(), remote.app.getVersion())
 
         try {
             const proc = pb.build()
 
-            ipc.send("winOpacity", "hide")
-
-            proc.stdout.on('data', event => {
-                console.log(event)
+            proc.on("spawn", () => {
+                ipc.send("winOpacity", "hide")
             })
 
             proc.on("close", () => {
@@ -141,7 +137,7 @@
             })
 
             proc.stderr.on('data', event => {
-                console.log("qosjndfilqsnfioqnsidfn")
+                console.log(event)
             })
 
         } catch (err) {

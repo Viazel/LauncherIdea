@@ -48,6 +48,7 @@
     const fs = require('fs-extra')
     const path = require("path")
     const os = require("os")
+    const { MSFT_OPCODE, MSFT_REPLY_TYPE } = require("../assets/js/ipcconstants")
 
     fs.remove(path.join(os.tmpdir(), ConfigManager.getTempNativeFolder()), (err) => {
         if(err){
