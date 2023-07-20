@@ -1,6 +1,6 @@
 {
   "name": "hyraniolauncher",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "productName": "Hyranio Launcher",
   "description": "Modded Minecraft Launcher",
   "author": "Viazel (https://github.com/viazel/)",
@@ -43,6 +43,7 @@
     "eslint": "^8.38.0"
   },
   "repository": {
+    ""
     "type": "git",
     "url": "git+https://github.com/Viazel/LauncherIdea.git"
   }

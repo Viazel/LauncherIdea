@@ -12,15 +12,6 @@
     <img src="../assets/icons/bigHyranio.png" alt="">
     <h1 id="update">Recherche de mise à jour..</h1>
 </div>
-<script>
-    const ipc = require("electron").ipcRenderer
-    const update = document.getElementById("update");
-
-    ipc.send("splash")
-
-    ipc.on('autoUpdateNotification', (evt, data) => {
-        update.innerHTML = data;
-    })
-</script>
+<script src="./js/splash.js"></script>
 </body>
 </html>
