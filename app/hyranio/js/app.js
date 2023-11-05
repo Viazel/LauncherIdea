@@ -24,7 +24,6 @@ if(ConfigManager.isLoaded()) {
 }
 
 ipc.send("app")
-
 ipc.on("test", () => {
     console.log("uhndfsgisdhgf")
 })

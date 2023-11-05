@@ -14,19 +14,20 @@ const logger = LoggerUtil.getLogger('ProcessBuilder')
 
 class ProcessBuilder {
 
-    constructor(distroServer, versionData, forgeData, authUser, launcherVersion){
+    constructor(distroServer, versionData, forgeData, authUser, launcherVersion, serverName){
         this.gameDir = path.join(ConfigManager.getInstanceDirectory(), distroServer.rawServer.id)
         this.commonDir = ConfigManager.getCommonDirectory()
         this.server = distroServer
         this.versionData = versionData
         this.forgeData = forgeData
-        this.forgeData.mainClass = 'net.minecraft.client.main.Main'
         this.authUser = authUser
         this.launcherVersion = launcherVersion
         this.forgeModListFile = path.join(this.gameDir, 'forgeMods.list') // 1.13+
         this.fmlDir = path.join(this.gameDir, 'forgeModList.json')
         this.llDir = path.join(this.gameDir, 'liteloaderModList.json')
         this.libPath = path.join(this.commonDir, 'libraries')
+        this.serverName = serverName
+        this.forgeData.mainClass = 'cpw.mods.bootstraplauncher.BootstrapLauncher'
 
         this.usingLiteLoader = false
         this.llPath = null
@@ -665,12 +666,17 @@ class ProcessBuilder {
     classpathArg(mods, tempNativePath){
         let cpArgs = []
 
-        // if(!mcVersionAtLeast('1.17', this.server.rawServer.minecraftVersion)) {
-        //     // Add the version.jar to the classpath.
-        //     // Must not be added to the classpath for Forge 1.17+.
+        // if(this.serverName === "Crew-1.20.1") {
         //     const version = this.versionData.id
         //     cpArgs.push(path.join(this.commonDir, 'versions', version, version + '.jar'))
         // }
+
+        if(!mcVersionAtLeast('1.17', this.server.rawServer.minecraftVersion)) {
+            // Add the version.jar to the classpath.
+            // Must not be added to the classpath for Forge 1.17+.
+            const version = this.versionData.id
+            cpArgs.push(path.join(this.commonDir, 'versions', version, version + '.jar'))
+        }
         
 
         if(this.usingLiteLoader){
@@ -686,8 +692,7 @@ class ProcessBuilder {
         // Merge libraries, server libs with the same
         // maven identifier will override the mojang ones.
         // Ex. 1.7.10 forge overrides mojang's guava with newer version.
-        let finalLibs = {...mojangLibs}
-        finalLibs['hyranio'] = path.join(ConfigManager.getInstanceDirectory(),ConfigManager.getSelectedServer() ,'version', 'Hyranio.jar')
+        let finalLibs = {...mojangLibs, ...servLibs}
 
         cpArgs = cpArgs.concat(Object.values(finalLibs))
 

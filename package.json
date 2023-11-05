@@ -43,7 +43,6 @@
     "eslint": "^8.38.0"
   },
   "repository": {
-    ""
     "type": "git",
     "url": "git+https://github.com/Viazel/LauncherIdea.git"
   }
