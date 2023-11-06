@@ -232,6 +232,8 @@ function createWindow() {
         }
     })
 
+    win.webContents.openDevTools();
+
     const splash = new BrowserWindow({
         width: 550,
         height: 700,

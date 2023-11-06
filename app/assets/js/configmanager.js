@@ -7,7 +7,7 @@ const logger = LoggerUtil.getLogger('ConfigManager')
 
 const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME)
 
-const dataPath = path.join(sysRoot, '.hyraniolauncher')
+let dataPath = path.join(sysRoot, '.hyraniolauncher');
 
 const launcherDir = require('@electron/remote').app.getPath('userData')
 
@@ -616,6 +616,7 @@ exports.setMaxRAM = function(serverid, maxRAM){
  * @returns {string} The path of the Java Executable.
  */
 exports.getJavaExecutable = function(serverid){
+    console.log(config.javaConfig[serverid])
     return config.javaConfig[serverid].executable
 }
 

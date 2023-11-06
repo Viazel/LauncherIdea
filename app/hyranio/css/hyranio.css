@@ -360,3 +360,16 @@ body.activatedLauncher {
 #play .box-social img {
     height: 30px;
 }
+#progess, #progress-label {
+    display: none;
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -80%);
+}
+#progress-label {
+    position: absolute;
+    color: #fff;
+    transform: translate(-50%,calc(-50% - 30px));
+}

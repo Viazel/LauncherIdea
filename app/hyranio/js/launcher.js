@@ -30,7 +30,16 @@ async function launchGame(serverName) {
             javaversion = "17"
             break;
     }
-    ConfigManager.setJavaExecutable(serverName, path.join('C:', 'Program Files', 'Java', fs.readdirSync('C:\\Program Files\\Java').filter(value => value.includes(javaversion)).pop(), 'bin', 'javaw.exe'))
+
+    let java;
+
+    if(process.platform === "darwin") {
+        java = "/usr/bin/java"
+    }else {
+        java = path.join('C:', 'Program Files', 'Java', fs.readdirSync('C:\\Program Files\\Java').filter(value => value.includes(javaversion)).pop(), 'bin', 'javaw.exe');
+    }
+
+    ConfigManager.setJavaExecutable(serverName, java)
     ConfigManager.setJVMOptions(serverName, ['-Xmn128M'])
     ConfigManager.save()
 
@@ -58,9 +67,11 @@ async function launchGame(serverName) {
 
     if(invalidFileCount > 0) {
         console.log('Mise a jour')
+        document.getElementById("progess").style.display = "block"
+        document.getElementById("progress-label").style.display = "block"
         try {
             await fullRepairModule.download(percent => {
-                console.log(percent)
+                document.getElementById("progess").value = percent;
             })
         } catch (err) {
             console.log(err)
@@ -89,6 +100,8 @@ async function launchGame(serverName) {
 
         proc.on('spawn', () => {
             ipc.send('winOpacity', 'hide')
+            document.getElementById("progess").style.display = "none"
+            document.getElementById("progress-label").style.display = "none"
         })
 
         proc.on('close', () => {
