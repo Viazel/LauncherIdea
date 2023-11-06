@@ -25,6 +25,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "adm-zip": "^0.5.9",
+    "decompress": "^4.2.1",
     "discord-rpc-patch": "^4.0.1",
     "ejs": "^3.1.9",
     "ejs-electron": "^2.1.1",
@@ -34,8 +35,12 @@
     "got": "^11.8.5",
     "helios-core": "~2.0.4",
     "helios-distribution-types": "^1.2.0",
+    "install": "^0.13.0",
     "jquery": "^3.6.4",
-    "semver": "^7.4.0"
+    "npm": "^10.2.3",
+    "semver": "^7.4.0",
+    "tar": "^6.2.0",
+    "tar-fs": "^3.0.4"
   },
   "devDependencies": {
     "electron": "^24.1.1",

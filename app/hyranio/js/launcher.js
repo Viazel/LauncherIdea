@@ -7,6 +7,53 @@ document.querySelectorAll('#launcher-option > .box-social').forEach(element => {
 
 async function launchGame(serverName) {
 
+    document.getElementById("progess").value = 0;
+
+    const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME)
+
+    let dataPath = path.join(sysRoot, 'Hyranio Launcher');
+
+    const http = require("https")
+    const zip = require("decompress")
+
+    let fileName;
+
+    if(process.platform === "darwin") {
+        fileName = "javaMac.zip"
+    }else {
+        fileName = "javaWindows.zip"
+    }
+
+    if(!fs.existsSync(path.join(dataPath, "Java"))) {
+        document.getElementById("progress-label").style.display = "block"
+        document.getElementById("progess").style.display = "block"
+        document.getElementById("progress-label").innerText = "Téléchargement de Java..."
+        fs.mkdirSync(path.join(dataPath, "Java"))
+        const file = fs.createWriteStream(path.join(dataPath,"Java", fileName));
+        let i =0;
+        const request = http.get("https://niderio.fr/files/" + fileName, function(response) {
+            response.pipe(file);
+            // after download completed close filestream
+            file.on("drain", () => {
+                document.getElementById("progess").value = Math.round(i/11654 * 100);
+                i++;
+            })
+
+            file.on("finish", () => {
+                file.close();
+                zip(path.join(dataPath, "Java", fileName), path.join(dataPath, "Java")).then(() => {
+                    fs.unlinkSync(path.join(dataPath, "Java", fileName))
+                    document.getElementById("progess").value = 0;
+                    next(serverName, dataPath)
+                })
+            });
+        });
+        return;
+    }
+    next(serverName, dataPath);
+}
+
+async function next(serverName, dataPath) {
     const { DistroAPI } = require('../assets/js/distromanager')
     const remote = require('@electron/remote')
     const { FullRepair, MojangIndexProcessor, DistributionIndexProcessor } = require('helios-core/dl')
@@ -32,11 +79,10 @@ async function launchGame(serverName) {
     }
 
     let java;
-
     if(process.platform === "darwin") {
-        java = "/usr/bin/java"
+        java = path.join(dataPath, "Java", "bin", "java")
     }else {
-        java = path.join('C:', 'Program Files', 'Java', fs.readdirSync('C:\\Program Files\\Java').filter(value => value.includes(javaversion)).pop(), 'bin', 'javaw.exe');
+        java = path.join(dataPath, "Java", "bin", "javaw.exe")
     }
 
     ConfigManager.setJavaExecutable(serverName, java)
@@ -66,9 +112,9 @@ async function launchGame(serverName) {
     }
 
     if(invalidFileCount > 0) {
-        console.log('Mise a jour')
-        document.getElementById("progess").style.display = "block"
         document.getElementById("progress-label").style.display = "block"
+        document.getElementById("progess").style.display = "block"
+        document.getElementById("progress-label").innerText = "Téléchargement du Jeu..."
         try {
             await fullRepairModule.download(percent => {
                 document.getElementById("progess").value = percent;
@@ -77,6 +123,10 @@ async function launchGame(serverName) {
             console.log(err)
         }
     }
+
+    document.getElementById("progress-label").style.display = "none"
+    document.getElementById("progess").style.display = "none"
+    document.getElementById("progess").value = 0;
 
     fullRepairModule.destroyReceiver()
 
@@ -100,8 +150,8 @@ async function launchGame(serverName) {
 
         proc.on('spawn', () => {
             ipc.send('winOpacity', 'hide')
-            document.getElementById("progess").style.display = "none"
             document.getElementById("progress-label").style.display = "none"
+            document.getElementById("progess").style.display = "none"
         })
 
         proc.on('close', () => {
