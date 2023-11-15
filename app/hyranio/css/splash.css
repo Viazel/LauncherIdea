@@ -35,6 +35,7 @@ body {
 }
 
 #splash h1 {
+    text-align: center;
     margin: 0 auto;
     color: #fafafa;
 }

@@ -13,10 +13,13 @@ ipc.on(MSFT_OPCODE.REPLY_LOGIN, (evt, ...data) => {
     button.innerHTML = "Connexion en cours..."
     button.disabled = true
     AuthManager.addMicrosoftAccount(data[1].code).then(value => {
-        button.innerHTML = "Connecté !!"
-        document.getElementById("player-name").innerHTML = value.displayName
-        document.getElementById("player-skin").src = 'https://mc-heads.net/body/' + value.uuid + '/240'
-        switchLauncherView()
+        setTimeout(() => {
+            button.innerHTML = "Connecté !!"
+            document.getElementById("player-name").innerHTML = value.displayName
+            document.getElementById("player-skin").src = 'https://mc-heads.net/body/' + value.uuid + '/240'
+            switchLauncherView()
+        }, 300)
+
     }).catch(result => {
         console.log(result);
     })

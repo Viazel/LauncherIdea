@@ -7,6 +7,7 @@ const path                              = require('path')
 const ejse = require('ejs-electron')
 const semver                            = require('semver')
 const { AZURE_CLIENT_ID, MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR, SHELL_OPCODE } = require('./app/assets/js/ipcconstants')
+const {u} = require("tar");
 
 // Setup auto updater.
 function initAutoUpdater(win, splash, splashwindow) {
@@ -109,10 +110,12 @@ let msftAuthSuccess
 let msftAuthViewSuccess
 let msftAuthViewOnClose
 ipcMain.on(MSFT_OPCODE.OPEN_LOGIN, (ipcEvent, ...arguments_) => {
+
     if (msftAuthWindow) {
         ipcEvent.reply(MSFT_OPCODE.REPLY_LOGIN, MSFT_REPLY_TYPE.ERROR, MSFT_ERROR.ALREADY_OPEN, msftAuthViewOnClose)
         return
     }
+
     msftAuthSuccess = false
     msftAuthViewSuccess = arguments_[0]
     msftAuthViewOnClose = arguments_[1]
@@ -223,7 +226,7 @@ function createWindow() {
         height: 720,
         icon: getPlatformIcon('hyranio'),
         frame: false,
-        show: true,
+        show: false,
         backgroundColor: '#121212',
         resizable: false,
         webPreferences: {
@@ -231,8 +234,6 @@ function createWindow() {
             contextIsolation: false
         }
     })
-
-    win.webContents.openDevTools();
 
     const splash = new BrowserWindow({
         width: 550,
@@ -242,7 +243,7 @@ function createWindow() {
         resizable: false,
         movable: false,
         center: true,
-        show: false,
+        show: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false

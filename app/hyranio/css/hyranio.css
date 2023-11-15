@@ -156,6 +156,7 @@ body.activatedLauncher {
     display: flex;
     justify-content: flex-start;
     align-content: center;
+    transition: all ease-in-out 250ms;
 }
 
 .box-social img {
@@ -347,6 +348,10 @@ body.activatedLauncher {
     height: 100%;
 }
 
+.box-social[server = 'Crew-1.20.1']:hover {
+    transform: translate(3px, -5px);
+}
+
 #play .box-social {
     width: 270px;
     position: absolute;
@@ -372,4 +377,27 @@ body.activatedLauncher {
     position: absolute;
     color: #fff;
     transform: translate(-50%,calc(-50% - 30px));
+}
+
+#deconnexion:hover {
+    transform: translate(2px, -3px);
+}
+
+#deconnexion {
+    position: absolute;
+    bottom: 35px;
+    right: 50px;
+    width: 160px;
+}
+#deconnexion .text-social h1, #deconnexion .text-social p {
+    text-align: center;
+    margin: 3px auto;
+}
+
+#deconnexion .text-social {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }

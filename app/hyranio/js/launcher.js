@@ -5,6 +5,14 @@ document.querySelectorAll('#launcher-option > .box-social').forEach(element => {
     }
 })
 
+document.getElementById("deconnexion").onclick = async () => {
+    button.disabled = false
+    button.innerHTML = "Se connecter !"
+    ConfigManager.removeAuthAccount(ConfigManager.getSelectedAccount()['uuid'])
+    ConfigManager.save()
+    switchLauncherView();
+}
+
 async function launchGame(serverName) {
 
     document.getElementById("progess").value = 0;
@@ -25,8 +33,8 @@ async function launchGame(serverName) {
     }
 
     if(!fs.existsSync(path.join(dataPath, "Java"))) {
-        document.getElementById("progress-label").style.display = "block"
         document.getElementById("progess").style.display = "block"
+        document.getElementById("progress-label").style.display = "block"
         document.getElementById("progress-label").innerText = "Téléchargement de Java..."
         fs.mkdirSync(path.join(dataPath, "Java"))
         const file = fs.createWriteStream(path.join(dataPath,"Java", fileName));
@@ -124,7 +132,8 @@ async function next(serverName, dataPath) {
         }
     }
 
-    document.getElementById("progress-label").style.display = "none"
+    document.getElementById("progress-label").style.display = "block"
+    document.getElementById("progress-label").innerText = "Lancement du jeu ..."
     document.getElementById("progess").style.display = "none"
     document.getElementById("progess").value = 0;
 
